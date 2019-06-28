@@ -22,6 +22,7 @@ import argparse
 import tempfile
 import warnings
 from collections import Counter
+from tqdm import tqdm
 
 #hack to get imports working if running this as a script, or within a package
 if __name__ == '__main__':
@@ -83,12 +84,12 @@ def learn_joint_bpe_and_vocab(args):
         sys.exit(1)
 
     # read/write files as UTF-8
-    args.input = [codecs.open(f.name, encoding='UTF-8') for f in args.input]
+    args.input = [codecs.open(f.name, encoding='UTF-8') for f in tqdm(args.input,desc="open input file")]
     args.vocab = [codecs.open(f.name, 'w', encoding='UTF-8') for f in args.vocab]
 
     # get combined vocabulary of all input texts
     full_vocab = Counter()
-    for f in args.input:
+    for f in tqdm(args.input,desc="full_vocab"):
         full_vocab += learn_bpe.get_vocabulary(f)
         f.seek(0)
 

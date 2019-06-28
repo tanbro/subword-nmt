@@ -9,6 +9,7 @@ import argparse
 import codecs
 
 from collections import Counter
+from tqdm import tqdm
 
 # hack for python2/3 compatibility
 from io import open
@@ -41,7 +42,7 @@ def get_vocab(train_file, vocab_file):
 
     c = Counter()
 
-    for line in train_file:
+    for line in tqdm(train_file,desc="get_vocab"):
         for word in line.strip('\r\n ').split(' '):
             if word:
                 c[word] += 1
