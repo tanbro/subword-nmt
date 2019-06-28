@@ -16,6 +16,7 @@ setup(
     ],
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     install_requires=['tqdm'],
+    test_requires=['pytest'],
     entry_points={
         'console_scripts': ['subword-nmt=subword_nmt.subword_nmt:main'],
     },
