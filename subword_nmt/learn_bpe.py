@@ -172,7 +172,7 @@ def get_pair_statistics(vocab):
     # data structure of pair frequencies
     stats = defaultdict(int)
 
-    #index from pairs to words
+    # index from pairs to words
     indices = defaultdict(lambda: defaultdict(int))
 
     for i, (word, freq) in enumerate(vocab):

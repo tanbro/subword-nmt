@@ -10,19 +10,19 @@ Rico Sennrich, Barry Haddow and Alexandra Birch (2015). Neural Machine Translati
 Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL 2016). Berlin, Germany.
 """
 
-from __future__ import unicode_literals, division
+from __future__ import division, unicode_literals
 
-import sys
-import os
-import inspect
-import codecs
-import io
 import argparse
+import codecs
+import inspect
+import io
+import os
 import re
+import sys
 import warnings
-
 # hack for python2/3 compatibility
 from io import open
+
 argparse.open = open
 
 
@@ -287,7 +287,7 @@ def recursive_split(segment, bpe_codes, vocab, separator, final=False):
         else:
             left, right = bpe_codes[segment]
     except:
-        #sys.stderr.write('cannot split {0} further.\n'.format(segment))
+        # sys.stderr.write('cannot split {0} further.\n'.format(segment))
         yield segment
         return
 
@@ -314,7 +314,7 @@ def check_vocab_and_split(orig, bpe_codes, vocab, separator):
         if segment + separator in vocab:
             out.append(segment)
         else:
-            #sys.stderr.write('OOV: {0}\n'.format(segment))
+            # sys.stderr.write('OOV: {0}\n'.format(segment))
             for item in recursive_split(segment, bpe_codes, vocab, separator, False):
                 out.append(item)
 
@@ -322,7 +322,7 @@ def check_vocab_and_split(orig, bpe_codes, vocab, separator):
     if segment in vocab:
         out.append(segment)
     else:
-        #sys.stderr.write('OOV: {0}\n'.format(segment))
+        # sys.stderr.write('OOV: {0}\n'.format(segment))
         for item in recursive_split(segment, bpe_codes, vocab, separator, True):
             out.append(item)
 
@@ -338,7 +338,7 @@ def read_vocabulary(vocab_file, threshold):
     for line in vocab_file:
         word, freq = line.strip('\r\n ').split(' ')
         freq = int(freq)
-        if threshold == None or freq >= threshold:
+        if threshold is None or freq >= threshold:
             vocabulary.add(word)
 
     return vocabulary
@@ -348,7 +348,7 @@ def isolate_glossary(word, glossary):
     """
     Isolate a glossary present inside a word.
 
-    Returns a list of subwords. In which all 'glossary' glossaries are isolated 
+    Returns a list of subwords. In which all 'glossary' glossaries are isolated
 
     For example, if 'USA' is the glossary and '1934USABUSA' the word, the return value is:
         ['1934', 'USA', 'B', 'USA']

@@ -10,9 +10,8 @@ exclude =
     build/,
     dist/,
     .vscode/,
-    .idea/,
-    src/ks33requests/schemas/s3_*.py
-max-line-length = 120
+    .idea/
+max-line-length = 240
 max-complexity = 10
 
 [mypy]

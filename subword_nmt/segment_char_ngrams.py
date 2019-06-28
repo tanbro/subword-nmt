@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Rico Sennrich
 
-from __future__ import unicode_literals, division
+from __future__ import division, unicode_literals
 
-import sys
-import codecs
 import argparse
-
+import codecs
+import sys
 # hack for python2/3 compatibility
 from io import open
+
 argparse.open = open
 
 

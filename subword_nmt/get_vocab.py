@@ -68,7 +68,8 @@ if __name__ == "__main__":
     if os.path.isdir(newdir):
         warnings.simplefilter('default')
         warnings.warn(
-            "this script's location has moved to {0}. This symbolic link will be removed in a future version. Please point to the new location, or install the package and use the command 'subword-nmt'"
+            "this script's location has moved to {0}. This symbolic link will be removed in a future version. "
+            "Please point to the new location, or install the package and use the command 'subword-nmt'"
             .format(newdir), DeprecationWarning
         )
 

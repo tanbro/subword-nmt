@@ -13,17 +13,19 @@ Proceedings of the 54th Annual Meeting of the Association for Computational Ling
 
 from __future__ import unicode_literals
 
-import sys
-import os
-import inspect
-import codecs
 import argparse
+import codecs
+import inspect
+import os
+import sys
 import tempfile
 import warnings
 from collections import Counter
+from io import open
+
 from tqdm import tqdm
 
-#hack to get imports working if running this as a script, or within a package
+# hack to get imports working if running this as a script, or within a package
 if __name__ == '__main__':
     import learn_bpe
     import apply_bpe
@@ -32,7 +34,6 @@ else:
     from . import apply_bpe
 
 # hack for python2/3 compatibility
-from io import open
 argparse.open = open
 
 

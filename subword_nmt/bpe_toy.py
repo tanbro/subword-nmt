@@ -12,9 +12,9 @@ Rico Sennrich, Barry Haddow and Alexandra Birch (2016). Neural Machine Translati
 Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL 2016). Berlin, Germany.
 """
 
+import collections
 import re
 import sys
-import collections
 
 
 def get_stats(vocab):

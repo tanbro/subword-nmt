@@ -7,17 +7,16 @@ Reference:
 Maja Popović (2015). chrF: character n-gram F-score for automatic MT evaluation. In Proceedings of the Tenth Workshop on Statistical Machine Translationn, pages 392–395, Lisbon, Portugal.
 """
 
-from __future__ import print_function, unicode_literals, division
+from __future__ import division, print_function, unicode_literals
 
-import sys
+import argparse
 import codecs
 import io
-import argparse
-
+import sys
 from collections import defaultdict
-
 # hack for python2/3 compatibility
 from io import open
+
 argparse.open = open
 
 
