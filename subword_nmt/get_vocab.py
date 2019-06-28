@@ -15,40 +15,51 @@ from tqdm import tqdm
 from io import open
 argparse.open = open
 
+
 def create_parser(subparsers=None):
 
     if subparsers:
-        parser = subparsers.add_parser('get-vocab',
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            description="Generates vocabulary")
+        parser = subparsers.add_parser(
+            'get-vocab', formatter_class=argparse.RawDescriptionHelpFormatter, description="Generates vocabulary"
+        )
     else:
         parser = argparse.ArgumentParser(
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            description="Generates vocabulary")
+            formatter_class=argparse.RawDescriptionHelpFormatter, description="Generates vocabulary"
+        )
 
     parser.add_argument(
-        '--input', '-i', type=argparse.FileType('r'), default=sys.stdin,
+        '--input',
+        '-i',
+        type=argparse.FileType('r'),
+        default=sys.stdin,
         metavar='PATH',
-        help="Input file (default: standard input).")
+        help="Input file (default: standard input)."
+    )
 
     parser.add_argument(
-        '--output', '-o', type=argparse.FileType('w'), default=sys.stdout,
+        '--output',
+        '-o',
+        type=argparse.FileType('w'),
+        default=sys.stdout,
         metavar='PATH',
-        help="Output file (default: standard output)")
+        help="Output file (default: standard output)"
+    )
 
     return parser
+
 
 def get_vocab(train_file, vocab_file):
 
     c = Counter()
 
-    for line in tqdm(train_file,desc="get_vocab"):
+    for line in tqdm(train_file, desc="get_vocab"):
         for word in line.strip('\r\n ').split(' '):
             if word:
                 c[word] += 1
 
-    for key,f in sorted(c.items(), key=lambda x: x[1], reverse=True):
-        vocab_file.write(key+" "+ str(f) + "\n")
+    for key, f in sorted(c.items(), key=lambda x: x[1], reverse=True):
+        vocab_file.write(key + " " + str(f) + "\n")
+
 
 if __name__ == "__main__":
 
@@ -57,8 +68,8 @@ if __name__ == "__main__":
     if os.path.isdir(newdir):
         warnings.simplefilter('default')
         warnings.warn(
-            "this script's location has moved to {0}. This symbolic link will be removed in a future version. Please point to the new location, or install the package and use the command 'subword-nmt'".format(newdir),
-            DeprecationWarning
+            "this script's location has moved to {0}. This symbolic link will be removed in a future version. Please point to the new location, or install the package and use the command 'subword-nmt'"
+            .format(newdir), DeprecationWarning
         )
 
     # python 2/3 compatibility

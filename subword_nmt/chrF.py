@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Author: Rico Sennrich
-
 """Compute chrF3 for machine translation evaluation
 
 Reference:
@@ -21,38 +20,34 @@ from collections import defaultdict
 from io import open
 argparse.open = open
 
+
 def create_parser():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="learn BPE-based word segmentation")
+        formatter_class=argparse.RawDescriptionHelpFormatter, description="learn BPE-based word segmentation"
+    )
 
     parser.add_argument(
-        '--ref', '-r', type=argparse.FileType('r'), required=True,
+        '--ref', '-r', type=argparse.FileType('r'), required=True, metavar='PATH', help="Reference file"
+    )
+    parser.add_argument(
+        '--hyp',
+        type=argparse.FileType('r'),
         metavar='PATH',
-        help="Reference file")
-    parser.add_argument(
-        '--hyp', type=argparse.FileType('r'), metavar='PATH',
         default=sys.stdin,
-        help="Hypothesis file (default: stdin).")
+        help="Hypothesis file (default: stdin)."
+    )
     parser.add_argument(
-        '--beta', '-b', type=float, default=3,
-        metavar='FLOAT',
-        help="beta parameter (default: '%(default)s')")
+        '--beta', '-b', type=float, default=3, metavar='FLOAT', help="beta parameter (default: '%(default)s')"
+    )
     parser.add_argument(
-        '--ngram', '-n', type=int, default=6,
-        metavar='INT',
-        help="ngram order (default: '%(default)s')")
-    parser.add_argument(
-        '--space', '-s', action='store_true',
-        help="take spaces into account (default: '%(default)s')")
-    parser.add_argument(
-        '--precision', action='store_true',
-        help="report precision (default: '%(default)s')")
-    parser.add_argument(
-        '--recall', action='store_true',
-        help="report recall (default: '%(default)s')")
+        '--ngram', '-n', type=int, default=6, metavar='INT', help="ngram order (default: '%(default)s')"
+    )
+    parser.add_argument('--space', '-s', action='store_true', help="take spaces into account (default: '%(default)s')")
+    parser.add_argument('--precision', action='store_true', help="report precision (default: '%(default)s')")
+    parser.add_argument('--recall', action='store_true', help="report recall (default: '%(default)s')")
 
     return parser
+
 
 def extract_ngrams(words, max_length=4, spaces=False):
 
@@ -66,7 +61,7 @@ def extract_ngrams(words, max_length=4, spaces=False):
         for start_pos in range(len(words)):
             end_pos = start_pos + length + 1
             if end_pos <= len(words):
-                results[length][tuple(words[start_pos: end_pos])] += 1
+                results[length][tuple(words[start_pos:end_pos])] += 1
     return results
 
 
@@ -87,31 +82,32 @@ def f1(correct, total_hyp, total_ref, max_length, beta=3, smooth=0):
     recall = 0
 
     for i in range(max_length):
-      if total_hyp[i] + smooth and total_ref[i] + smooth:
-        precision += (correct[i] + smooth) / (total_hyp[i] + smooth)
-        recall += (correct[i] + smooth) / (total_ref[i] + smooth)
+        if total_hyp[i] + smooth and total_ref[i] + smooth:
+            precision += (correct[i] + smooth) / (total_hyp[i] + smooth)
+            recall += (correct[i] + smooth) / (total_ref[i] + smooth)
 
     precision /= max_length
     recall /= max_length
 
-    return (1 + beta**2) * (precision*recall) / ((beta**2 * precision) + recall), precision, recall
+    return (1 + beta**2) * (precision * recall) / ((beta**2 * precision) + recall), precision, recall
+
 
 def main(args):
 
-    correct = [0]*args.ngram
-    total = [0]*args.ngram
-    total_ref = [0]*args.ngram
+    correct = [0] * args.ngram
+    total = [0] * args.ngram
+    total_ref = [0] * args.ngram
     for line in args.ref:
-      line2 = args.hyp.readline()
+        line2 = args.hyp.readline()
 
-      ngrams_ref = extract_ngrams(line, max_length=args.ngram, spaces=args.space)
-      ngrams_test = extract_ngrams(line2, max_length=args.ngram, spaces=args.space)
+        ngrams_ref = extract_ngrams(line, max_length=args.ngram, spaces=args.space)
+        ngrams_test = extract_ngrams(line2, max_length=args.ngram, spaces=args.space)
 
-      get_correct(ngrams_ref, ngrams_test, correct, total)
+        get_correct(ngrams_ref, ngrams_test, correct, total)
 
-      for rank in ngrams_ref:
-          for chain in ngrams_ref[rank]:
-              total_ref[rank] += ngrams_ref[rank][chain]
+        for rank in ngrams_ref:
+            for chain in ngrams_ref[rank]:
+                total_ref[rank] += ngrams_ref[rank][chain]
 
     chrf, precision, recall = f1(correct, total, total_ref, args.ngram, args.beta)
 
@@ -120,6 +116,7 @@ def main(args):
         print('chrPrec: {0:.4f}'.format(precision))
     if args.recall:
         print('chrRec: {0:.4f}'.format(recall))
+
 
 if __name__ == '__main__':
 

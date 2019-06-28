@@ -19,17 +19,21 @@ from .learn_joint_bpe_and_vocab import create_parser as create_learn_joint_bpe_a
 # hack for python2/3 compatibility
 argparse.open = io.open
 
+
 def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description="subword-nmt: unsupervised word segmentation for neural machine translation and text generation ")
-    subparsers = parser.add_subparsers(dest='command',
-                                       help="""command to run. Run one of the commands with '-h' for more info.
+        description="subword-nmt: unsupervised word segmentation for neural machine translation and text generation "
+    )
+    subparsers = parser.add_subparsers(
+        dest='command',
+        help="""command to run. Run one of the commands with '-h' for more info.
 
 learn-bpe: learn BPE merge operations on input text.
 apply-bpe: apply given BPE operations to input text.
 get-vocab: extract vocabulary and word frequencies from input text.
-learn-joint-bpe-and-vocab: executes recommended workflow for joint BPE.""")
+learn-joint-bpe-and-vocab: executes recommended workflow for joint BPE."""
+    )
 
     learn_bpe_parser = create_learn_bpe_parser(subparsers)
     apply_bpe_parser = create_apply_bpe_parser(subparsers)
@@ -45,8 +49,15 @@ learn-joint-bpe-and-vocab: executes recommended workflow for joint BPE.""")
         if args.output.name != '<stdout>':
             args.output = codecs.open(args.output.name, 'w', encoding='utf-8')
 
-        learn_bpe(args.input, args.output, args.symbols, args.min_frequency, args.verbose, 
-                  is_dict=args.dict_input, total_symbols=args.total_symbols)
+        learn_bpe(
+            args.input,
+            args.output,
+            args.symbols,
+            args.min_frequency,
+            args.verbose,
+            is_dict=args.dict_input,
+            total_symbols=args.total_symbols
+        )
     elif args.command == 'apply-bpe':
         # read/write files as UTF-8
         args.codes = codecs.open(args.codes.name, encoding='utf-8')

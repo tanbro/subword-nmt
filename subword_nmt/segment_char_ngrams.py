@@ -12,59 +12,82 @@ import argparse
 from io import open
 argparse.open = open
 
+
 def create_parser(subparsers=None):
 
     if subparsers:
-        parser = subparsers.add_parser('segment-char-ngrams',
+        parser = subparsers.add_parser(
+            'segment-char-ngrams',
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            description="segment rare words into character n-grams")
+            description="segment rare words into character n-grams"
+        )
     else:
         parser = argparse.ArgumentParser(
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            description="segment rare words into character n-grams")
+            description="segment rare words into character n-grams"
+        )
 
     parser.add_argument(
-        '--input', '-i', type=argparse.FileType('r'), default=sys.stdin,
+        '--input',
+        '-i',
+        type=argparse.FileType('r'),
+        default=sys.stdin,
         metavar='PATH',
-        help="Input file (default: standard input).")
+        help="Input file (default: standard input)."
+    )
+    parser.add_argument('--vocab', type=argparse.FileType('r'), metavar='PATH', required=True, help="Vocabulary file.")
     parser.add_argument(
-        '--vocab', type=argparse.FileType('r'), metavar='PATH',
-        required=True,
-        help="Vocabulary file.")
+        '--shortlist',
+        type=int,
+        metavar='INT',
+        default=0,
+        help="do not segment INT most frequent words in vocabulary (default: '%(default)s'))."
+    )
     parser.add_argument(
-        '--shortlist', type=int, metavar='INT', default=0,
-        help="do not segment INT most frequent words in vocabulary (default: '%(default)s')).")
+        '-n',
+        type=int,
+        metavar='INT',
+        default=2,
+        help="segment rare words into character n-grams of size INT (default: '%(default)s'))."
+    )
     parser.add_argument(
-        '-n', type=int, metavar='INT', default=2,
-        help="segment rare words into character n-grams of size INT (default: '%(default)s')).")
-    parser.add_argument(
-        '--output', '-o', type=argparse.FileType('w'), default=sys.stdout,
+        '--output',
+        '-o',
+        type=argparse.FileType('w'),
+        default=sys.stdout,
         metavar='PATH',
-        help="Output file (default: standard output)")
+        help="Output file (default: standard output)"
+    )
     parser.add_argument(
-        '--separator', '-s', type=str, default='@@', metavar='STR',
-        help="Separator between non-final subword units (default: '%(default)s'))")
+        '--separator',
+        '-s',
+        type=str,
+        default='@@',
+        metavar='STR',
+        help="Separator between non-final subword units (default: '%(default)s'))"
+    )
 
     return parser
+
 
 def segment_char_ngrams(args):
 
     vocab = [line.split()[0] for line in args.vocab if len(line.split()) == 2]
-    vocab = dict((y,x) for (x,y) in enumerate(vocab))
+    vocab = dict((y, x) for (x, y) in enumerate(vocab))
 
     for line in args.input:
-      for word in line.split():
-        if word not in vocab or vocab[word] > args.shortlist:
-          i = 0
-          while i*args.n < len(word):
-            args.output.write(word[i*args.n:i*args.n+args.n])
-            i += 1
-            if i*args.n < len(word):
-              args.output.write(args.separator)
-            args.output.write(' ')
-        else:
-          args.output.write(word + ' ')
-      args.output.write('\n')
+        for word in line.split():
+            if word not in vocab or vocab[word] > args.shortlist:
+                i = 0
+                while i * args.n < len(word):
+                    args.output.write(word[i * args.n:i * args.n + args.n])
+                    i += 1
+                    if i * args.n < len(word):
+                        args.output.write(args.separator)
+                    args.output.write(' ')
+            else:
+                args.output.write(word + ' ')
+        args.output.write('\n')
 
 
 if __name__ == '__main__':

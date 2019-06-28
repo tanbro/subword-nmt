@@ -15,6 +15,7 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    install_requires=['tqdm'],
     entry_points={
         'console_scripts': ['subword-nmt=subword_nmt.subword_nmt:main'],
     },
