@@ -1,4 +1,10 @@
 *.lock
+/[Dd]ata/
+/[Dd]ataset/
+/[Dd]atasets/
+/[Mm]odels/
+/[Oo]ut/
+/[Oo]utput/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
